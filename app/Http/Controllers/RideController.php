@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Events\RideCreated;
 use App\Http\Requests\RideRequest;
-use App\Http\Requests\UpdateRideRequest;
 use App\Models\Ride;
 use App\Services\RideService;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\View\View;
 
 class RideController extends Controller
 {
@@ -16,39 +19,29 @@ class RideController extends Controller
     {
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(): View
     {
         $rides = Ride::orderBy('created_at', 'desc')->paginate(3);
 
         return view('rides.index', compact('rides'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function create(): View
     {
         return view('rides.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\RideRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(RideRequest $request)
+    public function store(RideRequest $request): RedirectResponse
     {
-        $ride = $this->rideService->create($request->getData());
+        try {
+            $ride = $this->rideService->saveFromDto($request->getData());
 
-        event(new RideCreated($ride));
+            event(new RideCreated($ride));
+        } catch (Exception $exception) {
+            Log::error($exception->getMessage());
+
+            return redirect()->back();
+        }
 
         return redirect()->route('dashboard.rides');
     }
