@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserType;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,7 +25,7 @@ class UserFactory extends Factory
 
             // additional columns
             'phone' => $this->faker->phoneNumber,
-            'type' => $this->faker->randomElement(['admin', 'editor', 'user']),
+            'type' => $this->faker->randomElement(UserType::values()),
             'is_active' => $this->faker->boolean,
         ];
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ class AddColumnsInUsersTable extends Migration
         Schema::table('users', function (Blueprint $table) {
             $table->string('picture')->nullable();
             $table->string('phone')->nullable();
-            $table->enum('type', ['admin', 'editor', 'user'])->default('user');
+            $table->enum('type', UserType::values())->default(UserType::USER->value);
             $table->boolean('is_active')->default(true);
         });
     }
