@@ -2,12 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreRideRequest;
+use App\Events\RideCreated;
+use App\Http\Requests\RideRequest;
 use App\Http\Requests\UpdateRideRequest;
 use App\Models\Ride;
+use App\Services\RideService;
 
 class RideController extends Controller
 {
+    public function __construct(
+        private RideService $rideService,
+    )
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,18 +35,22 @@ class RideController extends Controller
      */
     public function create()
     {
-        //
+        return view('rides.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StoreRideRequest  $request
+     * @param  \App\Http\Requests\RideRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreRideRequest $request)
+    public function store(RideRequest $request)
     {
-        //
+        $ride = $this->rideService->create($request->getData());
+
+        event(new RideCreated($ride));
+
+        return redirect()->route('dashboard.rides');
     }
 
     /**
