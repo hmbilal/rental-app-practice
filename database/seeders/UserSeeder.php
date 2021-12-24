@@ -17,5 +17,11 @@ class UserSeeder extends Seeder
         User::factory()
             ->count(5)
             ->create();
+
+        User::factory()
+            ->count(1)
+            ->create([
+                'email' => 'admin@rental-app.local',
+            ]);
     }
 }
