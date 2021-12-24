@@ -26,7 +26,7 @@ class UserFactory extends Factory
             // additional columns
             'phone' => $this->faker->phoneNumber,
             'type' => $this->faker->randomElement(UserType::values()),
-            'is_active' => $this->faker->boolean,
+            'is_active' => true,
         ];
     }
 

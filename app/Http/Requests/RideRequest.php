@@ -28,8 +28,8 @@ class RideRequest extends FormRequest
             'id' => ['nullable', 'numeric'],
             'hourly_rate' => ['required', 'numeric', 'gt:0'],
             'day_rate' => ['required', 'numeric', 'gt:0'],
-            'no_of_doors' => ['required', 'numeric', 'gt:0'],
-            'picture' => ['nullable', 'image'],
+            'no_of_doors' => ['required', 'numeric', 'gte:0'],
+            'picture' => ['nullable', 'image', 'max:2048', 'mimes:jpg,png'],
             'is_active' => ['required', 'boolean'],
         ];
     }
